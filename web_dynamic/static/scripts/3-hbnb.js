@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#' + id).remove();
       }
     });
+  });
     $(function () {
       $.ajax({
         type: 'GET',
@@ -22,17 +23,66 @@ document.addEventListener('DOMContentLoaded', function () {
           if (data.status === 'OK') { apiDiv.addClass('api_status available'); } else { apiDiv.removeClass('api_status available'); }
         }
       });
-    $.ajax({
-      type: 'POST',
-      content-type: 'application/json',
-      url: 'http://0.0.0.0:5001/api/v1/places_search/',
-      success: function (data) {
-        $('SECTION.places').append('<article>');
-        data = JSON.parse(data)
-        $.each(JSON.parse(data), function (i, el) {
-          console.log(el);
-        })
-      }
-    });
+      $.ajax({
+        type: 'POST',
+        contentType: 'application/json',
+        data: '{}',
+        url: 'http://0.0.0.0:5001/api/v1/places_search/',
+        success: function (data) {
+          $.each(data, function (key, place) {
+            $('.places').append(`
+            <article>
+
+	    <div class="title">
+
+	      <h2>${place.name}</h2>
+
+	      <div class="price_by_night">
+
+				${place.price_by_night}
+
+	      </div>
+	    </div>
+	  <div class="information">
+	    <div class="max_guest">
+		<i class="fa fa-users fa-3x" aria-hidden="true"></i>
+
+		<br />
+
+		${place.max_guest} Guests
+
+	    </div>
+	    <div class="number_rooms">
+		<i class="fa fa-bed fa-3x" aria-hidden="true"></i>
+
+		<br />
+
+		${place.number_rooms} Bedrooms
+	      </div>
+	      <div class="number_bathrooms">
+		<i class="fa fa-bath fa-3x" aria-hidden="true"></i>
+
+		<br />
+
+		${place.number_bathrooms} Bathroom
+
+	      </div>
+	    </div>
+
+	    <!-- **********************
+		 USER
+		 **********************  -->
+
+	    <div class="description">
+
+	      ${place.description}
+
+	    </div>
+
+	  </article>
+            `)
+          });
+        }
+      });
   });
 });
